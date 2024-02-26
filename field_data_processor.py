@@ -1,5 +1,6 @@
 ### START FUNCTION
 import logging
+import pandas as pd
 from data_ingestion import create_db_engine, query_data, read_from_web_CSV
 
 #Checking if the function names are now associated with the module
@@ -89,7 +90,9 @@ class FieldDataProcessor:
 # Copy in your class including the ingest_sql_data and method here
 
     def weather_station_mapping(self):
-        return read_from_web_CSV(self.weather_map_data)
+        weather_station_df = read_from_web_CSV(self.weather_map_data)
+        self.df = pd.merge(self.df, weather_station_df, on='Field_ID', how='left')
+    
 
     def process(self):
         self.ingest_sql_data()
@@ -100,6 +103,5 @@ class FieldDataProcessor:
         
 
 field_processor = FieldDataProcessor
-
 
 ### END FUNCTION
